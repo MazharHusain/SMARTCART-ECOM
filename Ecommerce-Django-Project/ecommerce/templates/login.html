@@ -1,0 +1,104 @@
+{% extends 'auth.html' %}
+{% block title %}
+Login
+{% endblock title %}
+
+{% block style %}
+<style>
+
+button, .btn, a {
+    transition: all 0.3s ease !important;
+}
+
+button[type="submit"] {
+    background-color: #28a745;
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+button[type="submit"]:hover {
+    background-color: #1e7e34 !important;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+button[type="submit"]:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.text-center a {
+    font-weight: 500;
+    position: relative;
+}
+
+.text-center a:hover {
+    color: #0056b3 !important;
+    text-decoration: none;
+}
+
+.text-center a::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #007bff;
+    transition: 0.3s ease;
+}
+
+.text-center a:hover::after {
+    width: 100%;
+}
+
+</style>
+</style>
+{% endblock style %}
+
+{% block content %}
+<h1 class="mb-4 pb-0 text-center"><span>Login</span></h1>
+
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+  <strong></strong>{{ message }}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+
+<form class="py-3 px-3" action="/login" method="post">
+  {% csrf_token %}
+  
+  <div class="form-group text-center">
+    <input type="email" class="form-control mb-3 mx-auto" style="max-width: 300px;" id="exampleInputEmail1" name="email" placeholder="Email" required>
+  </div>
+  
+  <div class="form-group text-center">
+    <input type="password" class="form-control mx-auto" style="max-width: 300px;" id="exampleInputPassword1" name="pass1" placeholder="Password" required>
+  </div>
+  
+  <br>
+  <div class="text-center">
+    <button type="submit" class="form-control bg-success text-white">Login</button>
+  </div>
+  
+  <div class="text-center mt-4" style="position: relative; z-index: 10;">
+    <p class="mb-2 text-muted">
+      Forget Password? <a href="/request-reset-email" style="color: #007bff; text-decoration: none; cursor: pointer;">Reset Here</a>
+    </p>
+    <p class="mb-0 text-muted">
+      New User? <a href="/signup" style="color: #007bff; text-decoration: none; cursor: pointer;">Signup</a>
+    </p>
+  </div>
+</form>
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+{% endblock script %}       
+
+{% endblock content %}

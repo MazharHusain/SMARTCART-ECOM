@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<title>{% block title %}
+{% endblock title %}</title>
+<meta content="" name="description">
+<meta content="" name="keywords">
+{% block style %}
+<style>
+</style>
+{% endblock style %}
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="static/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="static/assets/css/style.css" rel="stylesheet">
+
+ 
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="container">
+
+      <div id="logo" class="pull-left">
+
+        <a href="/" class="scrollto">SMARTCART</a>
+      </div>
+
+      
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Intro Section ======= -->
+  <section id="intro">
+    <div class="intro-container" data-aos="zoom-in" data-aos-delay="100">
+    {% block content %}
+ 
+{% endblock content %}
+    </div>
+  </section><!-- End Intro Section -->
+
+<div class="main">
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="bg-dark text-light mt-5 pt-5 pb-4">
+
+  <div class="container-fluid px-5">
+    <div class="row">
+
+      <!-- Brand -->
+      <div class="col-md-4 mb-4">
+        <h4 class="text-uppercase fw-bold">SmartCart</h4>
+        <p >
+          Your trusted online store for quality products with exciting flash sales and cashback offers.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-md-4 mb-4 ps-md-5">
+        <h5 class="text-uppercase fw-bold">Quick Links</h5>
+        <ul class="list-unstyled">
+          <li class="mb-3"><a href="/" class="text-light">Home</a></li>
+          <li class="mb-3"><a href="/agroproducts" class="text-light">Products</a></li>
+          <li class="mb-3"><a href="/tracker" class="text-light">Order Tracker</a></li>
+          <li class="mb-3"><a href="/checkout" class="text-light">Checkout</a></li>
+          <li class="mb-3"><a href="/contactus" class="text-light">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="col-md-4 mb-4 ps-md-5">
+        <h5 class="text-uppercase fw-bold">Contact</h5>
+        <p>Email: <a href="mailto:support@smartcart.com" class="text-light">support@smartcart.com</a></p>
+        <p>Phone: <a href="tel:+91-8303322308" class="text-light">+91-8303322308</a></p>
+        <p>Location: <a href="#" class="text-light">Lucknow, India</a></p>
+
+        <div class="mt-3">
+          <a href="https://www.facebook.com/israelkhan17?mibextid=ZbWKwL" class="text-light mr-3"><i class="fa fa-facebook"></i></a>
+          <a href="https://www.instagram.com/israelkhan.17__?igsh=cjZkb3J2N2dtMnBu" class="text-light mr-3"><i class="fa fa-instagram"></i></a>
+          <a href="#" class="text-light mr-3"><i class="fa fa-twitter"></i></a>
+          <a href="https://www.linkedin.com/in/mazhar-husain-a876a9255?utm_source=share_via&utm_content=profile&utm_medium=member_android" class="text-light"><i class="fa fa-linkedin"></i></a>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="bg-secondary">
+
+    <div class="text-center">
+      © 2026 SmartCart | Designed & Developed by Mazhar Husain
+    </div>
+
+  </div>
+</footer>
+
+
+  <a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="static/assets/vendor/jquery/jquery.min.js"></script>
+  <script src="static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="static/assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="static/assets/vendor/php-email-form/validate.js"></script>
+  <script src="static/assets/vendor/venobox/venobox.min.js"></script>
+  <script src="static/assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="static/assets/vendor/superfish/superfish.min.js"></script>
+  <script src="static/assets/vendor/hoverIntent/hoverIntent.js"></script>
+  <script src="static/assets/vendor/aos/aos.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="static/assets/js/main.js"></script>
+ 
+  {% block script %}{% endblock script %}
+
+</body>
+
+</html>
