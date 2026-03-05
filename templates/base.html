@@ -8,10 +8,8 @@
   <title>{% block title %}
   {% endblock title %}</title>
 
-
 {% block style %}
 <style>
-
 
 
 </style
@@ -29,7 +27,6 @@
   <!-- Template Main CSS File -->
   <link href="static/assets/css/style.css" rel="stylesheet">
 
- 
 </head>
 
 <body>
@@ -54,11 +51,8 @@
  <li><a href="/contactus">Contact Us</a></li>
 
  {% if  request.user.is_authenticated %}            
-     
          
-            <button type="button" class="btn btn-success " id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="Vivamus
-sagittis lacus vel augue laoreet rutrum faucibus.">
-
+            <button type="button" class="btn btn-success " id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
 
   Cart(<span id="cart">0</span>)
 </button>
@@ -85,14 +79,10 @@ sagittis lacus vel augue laoreet rutrum faucibus.">
   </section>
   <main id="main">
 
-
   {% block body %}
   
 
-
-
   {% endblock body %}
-
 
   <a href="" class="back-to-top"><i class="fa fa-angle-up"></i></a>
 

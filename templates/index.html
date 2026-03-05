@@ -50,8 +50,6 @@ menu-active
 
                                     <a href="/media/{{i.image}}"> <button  class="btn btn-success btn-sm cart ">View</button></a>
 
-                                                   
-
                                 </div>
                                 </div>
                             
@@ -60,27 +58,14 @@ menu-active
                      {% endfor %}
                      </div>
                     </div>
-
-
-
-
-      
-
-
-            
-        
+     
     {% endfor %}
 
-
-
-
-  <!-- ======= Footer ======= -->
   <footer id="footer" class="bg-dark text-light mt-5 pt-5 pb-4">
 
   <div class="container-fluid px-5">
     <div class="row">
 
-      <!-- Brand -->
       <div class="col-md-4 mb-4">
         <h4 class="text-uppercase fw-bold">SmartCart</h4>
         <p >
@@ -88,7 +73,6 @@ menu-active
         </p>
       </div>
 
-      <!-- Quick Links -->
       <div class="col-md-4 mb-4 ps-md-5">
         <h5 class="text-uppercase fw-bold">Products</h5>
         <ul class="list-unstyled">
@@ -100,7 +84,6 @@ menu-active
         </ul>
       </div>
 
-      <!-- Contact -->
       <div class="col-md-4 mb-4 ps-md-5">
         <h5 class="text-uppercase fw-bold">Contact</h5>
         <p>Email: <a href="mailto:support@smartcart.com" class="text-light">support@smartcart.com</a></p>
@@ -131,7 +114,6 @@ menu-active
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
   
 <script>
-        //find out the card from local storage
 
         if (localStorage.getItem('cart') == null) {
             var cart = {};
@@ -140,9 +122,6 @@ menu-active
             updateCart(cart);
 
         }
-        // add or increment code
-
-        // $('.cart').click(function() {
         $('.divpr').on('click', 'button.cart', function() {
             var idstr = this.id.toString();
 
@@ -160,7 +139,6 @@ menu-active
             localStorage.setItem('cart', JSON.stringify(cart));
             document.getElementById('cart').innerHTML = Object.keys(cart).length;
         });
-        // add pop over to cart
 
         $('#popcart').popover();
 

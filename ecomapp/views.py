@@ -22,14 +22,11 @@ def home(request):
         n=len(prod)
         nSlides = n // 4 + ceil((n / 4) - (n // 4))
         allProds.append([prod, range(1, nSlides), nSlides])
-
     params= {'allProds':allProds}
     return render(request,'index.html',params)
 
-
 def about(request):
     return render(request, 'about.html')
-
 
 def contactus(request):
     if not request.user.is_authenticated:
@@ -43,10 +40,7 @@ def contactus(request):
         contact = Contact(name=name, email=email, phone=phone, desc=desc)
         contact.save()
         messages.success(request,"Contact Form is Submitted")
-  
     return render(request, 'contactus.html')
-
-
 
 def tracker(request):
     if not request.user.is_authenticated:
@@ -71,20 +65,12 @@ def tracker(request):
 
     return render(request, 'tracker.html')
 
-
-
-
 def productView(request, myid):
-    # Fetch the product using the id
     product = Product.objects.filter(id=myid)
-
-
     return render(request, 'prodView.html', {'product':product[0]})
-
 
 def handlelogin(request):
       if request.method == 'POST':
-        # get parameters
         loginusername=request.POST['email']
         loginpassword=request.POST['pass1']
         user=authenticate(username=loginusername,password=loginpassword)
@@ -97,9 +83,6 @@ def handlelogin(request):
         else:
             messages.error(request,"Invalid Credentials")
             return redirect('/login')    
-
-         
-
       return render(request,'login.html')         
 
 def signup(request):
@@ -123,11 +106,9 @@ def signup(request):
                 return redirect('/signup')
         except Exception as identifier:
             pass        
-        # checks for error inputs
         user=User.objects.create_user(email,email,pass1)
         user.save()
         messages.info(request,'Thanks For Signing Up')
-        # messages.info(request,"Signup Successful Please Login")
         return redirect('/login')    
     return render(request,"signup.html")        
 
@@ -154,46 +135,32 @@ def request_reset_email(request):
 
             recipient_list = [email]
             send_mail(subject, message, from_email, recipient_list)
-
             messages.success(request,"Password Reset Email Sent")
 
         else:
-
             messages.error(request,"Email Not Found")
-
     return render(request,"request-reset-email.html")
 
 def set_new_password(request, uidb64, token):
     return render(request, 'set-new-password.html')
 
-
-# Initialize Razorpay Client
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
 def checkout(request):
 
     if request.method == "POST":
-
         name = request.POST.get("name")
         email = request.POST.get("email")
         items_json = request.POST.get("itemsJson")
-
         import json
         items = json.loads(items_json)
-
         total = 0
-
         for item in items:
-
             product_id = int(item.replace('pr',''))
             product = Product.objects.get(id=product_id)
-
             qty = items[item][0]
-
             total += product.price * qty
-
         amount = total * 100
-
         order = Orders.objects.create(
             name=name,
             email=email,
@@ -201,16 +168,13 @@ def checkout(request):
             amount=total,
             status="Pending"
         )
-
         razorpay_order = client.order.create({
             "amount": amount,
             "currency": "INR",
             "payment_capture": 1
         })
-
         order.razorpay_order_id = razorpay_order['id']
         order.save()
-
         context = {
             "order_id": razorpay_order['id'],
             "amount": amount,
@@ -218,25 +182,19 @@ def checkout(request):
             "name": name,
             "email": email
         }
-
         return render(request, "payment.html", context)
-
     return render(request, "checkout.html")
 
 @csrf_exempt
-def payment_success(request):
 
+def payment_success(request):
     payment_id = request.GET.get("payment_id")
     order_id = request.GET.get("order_id")
-
     try:
-
         order = Orders.objects.get(razorpay_order_id=order_id)
-
         order.payment_id = payment_id
         order.status = "Paid"
         order.save()
-
         return render(request,"paymentstatus.html",{
             "status":"Payment Successful",
             "order_id":order_id,
@@ -244,8 +202,8 @@ def payment_success(request):
         })
 
     except:
-
-        return render(request,"paymentstatus.html",{
+        return render(request,"paymentstatus.html",
+        {
             "status":"Payment Failed"
         })
 
