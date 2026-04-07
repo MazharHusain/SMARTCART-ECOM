@@ -1,0 +1,46 @@
+<html>
+<head>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+
+<body>
+
+<script>
+
+var options = {
+
+"key": "{{ key }}",
+
+"amount": "{{ amount }}",
+
+"currency": "INR",
+
+"name": "SMARTCART",
+
+"description": "Order Payment",
+
+"order_id": "{{ order_id }}",
+
+"handler": function (response){
+
+window.location.href = "/payment/success/?payment_id="
++ response.razorpay_payment_id
++ "&order_id="
++ response.razorpay_order_id;
+
+}
+
+};
+
+var rzp = new Razorpay(options);
+
+window.onload = function(){
+
+rzp.open();
+
+}
+
+</script>
+
+</body>
+</html>

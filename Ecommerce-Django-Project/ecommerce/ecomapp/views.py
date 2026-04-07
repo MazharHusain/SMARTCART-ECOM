@@ -8,9 +8,8 @@ from django.conf import settings
 from .models import Product,Contact,Orders,OrderUpdate
 from math import ceil
 import json
-from django.views.decorators.csrf import  csrf_exempt
-from PayTm import Checksum
-MERCHANT_KEY = 'bKMfNxPPf_QdZppa'
+import razorpay
+from django.views.decorators.csrf import csrf_exempt
 
 def home(request):
     current_user = request.user
@@ -23,14 +22,11 @@ def home(request):
         n=len(prod)
         nSlides = n // 4 + ceil((n / 4) - (n // 4))
         allProds.append([prod, range(1, nSlides), nSlides])
-
     params= {'allProds':allProds}
     return render(request,'index.html',params)
 
-
 def about(request):
     return render(request, 'about.html')
-
 
 def contactus(request):
     if not request.user.is_authenticated:
@@ -44,10 +40,7 @@ def contactus(request):
         contact = Contact(name=name, email=email, phone=phone, desc=desc)
         contact.save()
         messages.success(request,"Contact Form is Submitted")
-  
     return render(request, 'contactus.html')
-
-
 
 def tracker(request):
     if not request.user.is_authenticated:
@@ -72,107 +65,12 @@ def tracker(request):
 
     return render(request, 'tracker.html')
 
-
-
-
 def productView(request, myid):
-    # Fetch the product using the id
     product = Product.objects.filter(id=myid)
-
-
     return render(request, 'prodView.html', {'product':product[0]})
-
-
-
-    
-
-def checkout(request):
-    if not request.user.is_authenticated:
-        messages.warning(request,"Login & Try Again")
-        return redirect('/login')
-    if request.method=="POST":
-
-        items_json = request.POST.get('itemsJson', '')
-        name = request.POST.get('name', '')
-        amount = request.POST.get('amt')
-        email = request.POST.get('email', '')
-        address1 = request.POST.get('address1', '')
-        address2 = request.POST.get('address2','')
-        city = request.POST.get('city', '')
-        state = request.POST.get('state', '')
-        zip_code = request.POST.get('zip_code', '')
-        phone = request.POST.get('phone', '')
-         
-
-        Order = Orders(items_json=items_json,name=name,amount=amount, email=email, address1=address1,address2=address2,city=city,state=state,zip_code=zip_code,phone=phone)
-        print(amount)
-        Order.save()
-        update = OrderUpdate(order_id=Order.order_id,update_desc="the order has been placed")
-        update.save()
-        thank = True
-        id = Order.order_id
-        oid=str(id)
-        oid=str(id)
-        param_dict = {
-
-            'MID': 'add ur merchant id',
-            'ORDER_ID': oid,
-            'TXN_AMOUNT': str(amount),
-            'CUST_ID': email,
-            'INDUSTRY_TYPE_ID': 'Retail',
-            'WEBSITE': 'WEBSTAGING',
-            'CHANNEL_ID': 'WEB',
-            'CALLBACK_URL': 'http://127.0.0.1:8000/handlerequest/',
-
-        }
-        param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
-        return render(request, 'paytm.html', {'param_dict': param_dict})
-
-    return render(request, 'checkout.html')
-
-
-@csrf_exempt
-def handlerequest(request):
-
-    # paytm will send you post request here
-    form = request.POST
-    response_dict = {}
-    for i in form.keys():
-        response_dict[i] = form[i]
-        if i == 'CHECKSUMHASH':
-            checksum = form[i]
-
-    verify = Checksum.verify_checksum(response_dict, MERCHANT_KEY, checksum)
-    if verify:
-        if response_dict['RESPCODE'] == '01':
-            print('order successful')
-            a=response_dict['ORDERID']
-            b=response_dict['TXNAMOUNT']
-            # rid=a.replace("SMARTCART","")
-           
-            # print(rid)
-            # filter2= Orders.objects.filter(order_id=rid)
-            filter2= Orders.objects.filter(order_id=a)
-            print(filter2)
-            print(a,b)
-            for post1 in filter2:
-
-                post1.oid=a
-                post1.amountpaid=b
-                post1.paymentstatus="PAID"
-                post1.save()
-            print("run agede function")
-        else:
-            print('order was not successful because' + response_dict['RESPMSG'])
-    return render(request, 'paymentstatus.html', {'response': response_dict})
-
-
-      
-
 
 def handlelogin(request):
       if request.method == 'POST':
-        # get parameters
         loginusername=request.POST['email']
         loginpassword=request.POST['pass1']
         user=authenticate(username=loginusername,password=loginpassword)
@@ -185,9 +83,6 @@ def handlelogin(request):
         else:
             messages.error(request,"Invalid Credentials")
             return redirect('/login')    
-
-         
-
       return render(request,'login.html')         
 
 def signup(request):
@@ -211,11 +106,9 @@ def signup(request):
                 return redirect('/signup')
         except Exception as identifier:
             pass        
-        # checks for error inputs
         user=User.objects.create_user(email,email,pass1)
         user.save()
         messages.info(request,'Thanks For Signing Up')
-        # messages.info(request,"Signup Successful Please Login")
         return redirect('/login')    
     return render(request,"signup.html")        
 
@@ -242,14 +135,75 @@ def request_reset_email(request):
 
             recipient_list = [email]
             send_mail(subject, message, from_email, recipient_list)
-
             messages.success(request,"Password Reset Email Sent")
 
         else:
-
             messages.error(request,"Email Not Found")
-
     return render(request,"request-reset-email.html")
 
 def set_new_password(request, uidb64, token):
     return render(request, 'set-new-password.html')
+
+client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+def checkout(request):
+
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        items_json = request.POST.get("itemsJson")
+        import json
+        items = json.loads(items_json)
+        total = 0
+        for item in items:
+            product_id = int(item.replace('pr',''))
+            product = Product.objects.get(id=product_id)
+            qty = items[item][0]
+            total += product.price * qty
+        amount = total * 100
+        order = Orders.objects.create(
+            name=name,
+            email=email,
+            items_json=items_json,
+            amount=total,
+            status="Pending"
+        )
+        razorpay_order = client.order.create({
+            "amount": amount,
+            "currency": "INR",
+            "payment_capture": 1
+        })
+        order.razorpay_order_id = razorpay_order['id']
+        order.save()
+        context = {
+            "order_id": razorpay_order['id'],
+            "amount": amount,
+            "key": settings.RAZORPAY_KEY_ID,
+            "name": name,
+            "email": email
+        }
+        return render(request, "payment.html", context)
+    return render(request, "checkout.html")
+
+@csrf_exempt
+
+def payment_success(request):
+    payment_id = request.GET.get("payment_id")
+    order_id = request.GET.get("order_id")
+    try:
+        order = Orders.objects.get(razorpay_order_id=order_id)
+        order.payment_id = payment_id
+        order.status = "Paid"
+        order.save()
+        return render(request,"paymentstatus.html",{
+            "status":"Payment Successful",
+            "order_id":order_id,
+            "payment_id":payment_id
+        })
+
+    except:
+        return render(request,"paymentstatus.html",
+        {
+            "status":"Payment Failed"
+        })
+

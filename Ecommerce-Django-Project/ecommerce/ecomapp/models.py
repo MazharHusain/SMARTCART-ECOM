@@ -31,6 +31,7 @@ class Orders(models.Model):
     order_id = models.AutoField(primary_key=True)
     items_json =  models.CharField(max_length=5000)
     amount = models.IntegerField(default=0)
+    status=models.CharField(max_length=50, default="Pending")
     name = models.CharField(max_length=90)
     email = models.CharField(max_length=90)
     address1 = models.CharField(max_length=200)
@@ -41,6 +42,8 @@ class Orders(models.Model):
     oid=models.CharField(max_length=50,blank=True)
     amountpaid=models.CharField(max_length=500,blank=True,null=True)
     paymentstatus=models.CharField(max_length=20,blank=True)
+    razorpay_order_id=models.CharField(max_length=100, null=True, blank=True)
+    payment_id=models.CharField(max_length=100, null=True, blank=True)
     phone = models.CharField(max_length=100,default="")
     def __str__(self):
         return self.name

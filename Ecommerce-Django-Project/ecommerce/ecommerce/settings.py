@@ -12,12 +12,14 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from django.contrib.messages import constants as messages
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = '3gg^6dr*3*ta+qt3ql42dj&y#ehv^n_2g6-ty%0pm_s-ij#p1@'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+RAZORPAY_KEY_ID='rzp_test_SNf3Hhzhx3xZbQ'
+
+RAZORPAY_KEY_SECRET='tQFMhyCKNi3CVLEg9c8YFdw6'
+
 DEBUG = True
 
 ALLOWED_HOSTS = []

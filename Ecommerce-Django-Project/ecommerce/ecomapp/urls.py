@@ -1,6 +1,8 @@
 from django.urls import path
+from . import views 
 from streamlit import user
 from ecomapp import views
+from . import views 
 
 
 urlpatterns = [
@@ -12,8 +14,8 @@ urlpatterns = [
     path('contactus',views.contactus,name='contactus'),
     path('tracker', views.tracker, name="TrackingStatus"),
     path('products/<int:myid>', views.productView, name="ProductView"),
-    path('checkout/', views.checkout, name="Checkout"),
-    path('handlerequest/', views.handlerequest, name="HandleRequest"),
     path('request-reset-email/', views.request_reset_email, name="request-reset-email"),
     path('set-new-password/<uidb64>/<token>/', views.set_new_password, name="set-new-password"),
+    path('payment/success/', views.payment_success, name="PaymentSuccess"),
+    path('checkout/',views.checkout, name="Checkout"),
 ]
